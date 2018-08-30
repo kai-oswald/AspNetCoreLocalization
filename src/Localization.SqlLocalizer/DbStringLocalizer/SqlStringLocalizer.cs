@@ -8,7 +8,7 @@ namespace Localization.SqlLocalizer.DbStringLocalizer
     public class SqlStringLocalizer : IStringLocalizer
     {
         private readonly Dictionary<string, string> _localizations;
-
+        private readonly string _defaultCulture;
         private readonly DevelopmentSetup _developmentSetup;
         private readonly string _resourceKey;
         private bool _returnKeyOnlyIfNotFound;
@@ -22,14 +22,23 @@ namespace Localization.SqlLocalizer.DbStringLocalizer
             _returnKeyOnlyIfNotFound = returnKeyOnlyIfNotFound;
             _createNewRecordWhenLocalisedStringDoesNotExist = createNewRecordWhenLocalisedStringDoesNotExist;
         }
+        public SqlStringLocalizer(string defaultCulture, Dictionary<string, string> localizations, DevelopmentSetup developmentSetup, string resourceKey, bool returnKeyOnlyIfNotFound, bool createNewRecordWhenLocalisedStringDoesNotExist)
+        {
+            this._defaultCulture = defaultCulture;
+            _localizations = localizations;
+            _developmentSetup = developmentSetup;
+            _resourceKey = resourceKey;
+            _returnKeyOnlyIfNotFound = returnKeyOnlyIfNotFound;
+            _createNewRecordWhenLocalisedStringDoesNotExist = createNewRecordWhenLocalisedStringDoesNotExist;
+        }
         public LocalizedString this[string name]
         {
             get
             {
                 bool notSucceed;
                 var text = GetText(name, out notSucceed);
-                
-                return new LocalizedString(name, text,notSucceed);
+
+                return new LocalizedString(name, text, notSucceed);
             }
         }
 
@@ -44,7 +53,7 @@ namespace Localization.SqlLocalizer.DbStringLocalizer
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures)
         {
             throw new NotImplementedException();
-            
+
         }
 
         public IStringLocalizer WithCulture(CultureInfo culture)
@@ -52,7 +61,7 @@ namespace Localization.SqlLocalizer.DbStringLocalizer
             throw new NotImplementedException();
         }
 
-        private string GetText(string key,out bool notSucceed)
+        private string GetText(string key, out bool notSucceed)
         {
 
 #if NET451
@@ -62,9 +71,15 @@ namespace Localization.SqlLocalizer.DbStringLocalizer
 #else
             var culture = CultureInfo.CurrentCulture.ToString();
 #endif
+            string result;
+
+
+
+
+
             string computedKey = $"{key}.{culture}";
 
-            string result;
+
             if (_localizations.TryGetValue(computedKey, out result))
             {
                 notSucceed = false;
@@ -72,7 +87,17 @@ namespace Localization.SqlLocalizer.DbStringLocalizer
             }
             else
             {
+                if (!string.IsNullOrEmpty(_defaultCulture))
+                {
+                    var defaultCulturekey = $"{key}.{_defaultCulture}";
+                    if (_localizations.TryGetValue(defaultCulturekey, out result))
+                    {
+                        notSucceed = false;
+                        return result;
+                    }
+                }
                 notSucceed = true;
+
                 if (_createNewRecordWhenLocalisedStringDoesNotExist)
                 {
                     _developmentSetup.AddNewLocalizedItem(key, culture, _resourceKey);
@@ -84,11 +109,13 @@ namespace Localization.SqlLocalizer.DbStringLocalizer
                     return key;
                 }
 
+
                 return _resourceKey + "." + computedKey;
             }
         }
 
-        
+
+
 
     }
 }

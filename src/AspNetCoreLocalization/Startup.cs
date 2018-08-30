@@ -57,7 +57,7 @@ namespace AspNetCoreLocalization
 
             // Requires that LocalizationModelContext is defined
             // _createNewRecordWhenLocalisedStringDoesNotExist read from the dev env. 
-            services.AddSqlLocalization(options => options.UseSettings(
+            services.AddSqlLocalization(options => options.UseSettings("en-US",
                 useTypeFullNames, 
                 useOnlyPropertyNames, 
                 returnOnlyKeyIfNotFound,

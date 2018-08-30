@@ -23,6 +23,7 @@ namespace Localization.SqlLocalizer
         /// Creates a new item in the SQL database if the resource is not found
         /// </summary>
         public bool CreateNewRecordWhenLocalisedStringDoesNotExist { get; set; }
+        public string DefaultCulture { get; set; }
 
         /// <summary>
         /// You can set the required properties to set, get, display the different localization
@@ -37,6 +38,11 @@ namespace Localization.SqlLocalizer
             UseOnlyPropertyNames = useOnlyPropertyNames;
             ReturnOnlyKeyIfNotFound = returnOnlyKeyIfNotFound;
             CreateNewRecordWhenLocalisedStringDoesNotExist = createNewRecordWhenLocalisedStringDoesNotExist;
-    }
+        }
+        public void UseSettings(string defaultCulture, bool returnOnlyKeyIfNotFound)
+        {
+            DefaultCulture=defaultCulture;
+            ReturnOnlyKeyIfNotFound = returnOnlyKeyIfNotFound;
+        }
     }
 }

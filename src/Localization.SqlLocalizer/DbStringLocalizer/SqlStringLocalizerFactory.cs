@@ -29,6 +29,7 @@ namespace Localization.SqlLocalizer.DbStringLocalizer
 
         public IStringLocalizer Create(Type resourceSource)
         {
+            bool useWithDefault=!string.IsNullOrEmpty(_options.Value.DefaultCulture);
             var returnOnlyKeyIfNotFound = _options.Value.ReturnOnlyKeyIfNotFound;
             var createNewRecordWhenLocalisedStringDoesNotExist = _options.Value.CreateNewRecordWhenLocalisedStringDoesNotExist;
             SqlStringLocalizer sqlStringLocalizer;
@@ -59,8 +60,15 @@ namespace Localization.SqlLocalizer.DbStringLocalizer
             {
                 return _resourceLocalizations[resourceSource.Name];
             }
-
-            sqlStringLocalizer = new SqlStringLocalizer(GetAllFromDatabaseForResource(resourceSource.Name), _developmentSetup, resourceSource.Name, returnOnlyKeyIfNotFound, createNewRecordWhenLocalisedStringDoesNotExist);
+            if (useWithDefault)
+            {
+                sqlStringLocalizer = new SqlStringLocalizer(_options.Value.DefaultCulture,GetAllFromDatabaseForResource(resourceSource.Name), _developmentSetup, resourceSource.Name, returnOnlyKeyIfNotFound, createNewRecordWhenLocalisedStringDoesNotExist);
+            }
+            else
+            {
+                sqlStringLocalizer = new SqlStringLocalizer(GetAllFromDatabaseForResource(resourceSource.Name), _developmentSetup, resourceSource.Name, returnOnlyKeyIfNotFound, createNewRecordWhenLocalisedStringDoesNotExist);
+            }
+            
             return _resourceLocalizations.GetOrAdd(resourceSource.Name, sqlStringLocalizer);
         }
 

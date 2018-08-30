@@ -1,21 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>SQL Localizer for ASP.NET Core, dotnet</Description>
+    <Description>SQL Localizer for ASP.NET Core, dotnet 
+erweiterung von damienbod</Description>
     <VersionPrefix>2.0.0</VersionPrefix>
-    <Authors>damienbod</Authors>
+    <Authors>KO/TK</Authors>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <PackageId>Localization.SqlLocalizer</PackageId>
     <PackageTags>Localization;SqlLocalizer;SQlite;Postgres;MS SQL Server;MySQL</PackageTags>
     <PackageReleaseNotes>Release Notes: Version 2.0.2
 bug fix reset cache
-development mode, add, update item</PackageReleaseNotes>
+development mode, add, update item
+V2021 mit defaultlang</PackageReleaseNotes>
     <PackageIconUrl>http://www.gravatar.com/avatar/61d005637f57b5c3da8ba662cf04a9d6.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/damienbod/AspNet5Localization</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/damienbod/AspNet5Localization</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.2</Version>
+    <Version>2.0.2.1</Version>
+    <Company>Klueber</Company>
   </PropertyGroup>
 
   <ItemGroup>
